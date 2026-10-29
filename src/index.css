@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #0c0e14;
+    color: #f3f4f6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: var(--font-display);
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f1117;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232838;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
+
+/* TikTok Live floating heart animation */
+@keyframes floatUpFade {
+  0% {
+    transform: translateY(0) scale(0.6) rotate(0deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-80px) scale(1.1) rotate(15deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-160px) scale(0.8) rotate(-15deg);
+    opacity: 0;
+  }
+}
+
+.animate-float-heart {
+  animation: floatUpFade 1.6s ease-out forwards;
+}
+
+/* Subtle glow pulse */
+@keyframes livePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(254, 44, 85, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(254, 44, 85, 0);
+  }
+}
+
+.pulse-live-badge {
+  animation: livePulse 2s infinite;
+}
