@@ -8,7 +8,6 @@ import { CaseStudiesSection } from './components/CaseStudiesSection';
 import { PricingPackages } from './components/PricingPackages';
 import { ScreenshotModal } from './components/ScreenshotModal';
 import { PosterModal } from './components/PosterModal';
-import { EditProfileModal } from './components/EditProfileModal';
 import { HireModal } from './components/HireModal';
 import { Footer } from './components/Footer';
 import { ProjectInquiry, ProfileData } from './types';
@@ -23,7 +22,6 @@ export default function App() {
   const [isHireModalOpen, setIsHireModalOpen] = useState(false);
   const [isScreenshotOpen, setIsScreenshotOpen] = useState(false);
   const [isPosterOpen, setIsPosterOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const [selectedServiceForHire, setSelectedServiceForHire] = useState<string>('');
   const [selectedBudgetForHire, setSelectedBudgetForHire] = useState<number | undefined>(undefined);
@@ -34,16 +32,6 @@ export default function App() {
     const saved = localStorage.getItem('sumair_inquiries');
     return saved ? JSON.parse(saved) : [];
   });
-
-  const handleSaveProfile = (updated: ProfileData) => {
-    setProfile(updated);
-    localStorage.setItem('sumair_profile_custom', JSON.stringify(updated));
-  };
-
-  const handleResetDefaults = () => {
-    setProfile(SUMAIR_PROFILE);
-    localStorage.removeItem('sumair_profile_custom');
-  };
 
   const handleOpenHire = (serviceTitle?: string, budget?: number, scopeItems?: string[]) => {
     setSelectedServiceForHire(serviceTitle || '');
@@ -75,19 +63,17 @@ export default function App() {
         onOpenHireModal={() => handleOpenHire()}
         onOpenScreenshot={() => setIsScreenshotOpen(true)}
         onOpenPosterModal={() => setIsPosterOpen(true)}
-        onOpenEditModal={() => setIsEditModalOpen(true)}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
       />
 
       <main className="flex-1">
-        {/* Hero Section with exact requested bio and editable photo */}
+        {/* Hero Section with exact requested bio and photo */}
         <HeroSection
           profile={profile}
           onOpenHireModal={(srv) => handleOpenHire(srv)}
           onOpenScreenshot={() => setIsScreenshotOpen(true)}
           onOpenPosterModal={() => setIsPosterOpen(true)}
-          onOpenEditModal={() => setIsEditModalOpen(true)}
         />
 
         {/* Verified Upwork Client Reviews (Peter James, Creative Ads Editor) */}
@@ -131,15 +117,6 @@ export default function App() {
         onOpenHireModal={() => handleOpenHire()}
       />
 
-      {/* Custom Edit Profile & Photos Modal */}
-      <EditProfileModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        profile={profile}
-        onSaveProfile={handleSaveProfile}
-        onResetDefaults={handleResetDefaults}
-      />
-
       {/* Direct Contact & Booking Modal */}
       <HireModal
         isOpen={isHireModalOpen}
@@ -156,7 +133,6 @@ export default function App() {
         onOpenHireModal={() => handleOpenHire()}
         onOpenScreenshot={() => setIsScreenshotOpen(true)}
         onOpenPosterModal={() => setIsPosterOpen(true)}
-        onOpenEditModal={() => setIsEditModalOpen(true)}
       />
 
     </div>

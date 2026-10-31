@@ -6,6 +6,7 @@ export interface ProfileData {
   phone: string;
   whatsappUrl: string;
   email: string;
+  secondaryEmail?: string;
   linkedinUrl: string;
   photoUrl: string;
   posterUrl: string;

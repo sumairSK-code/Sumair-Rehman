@@ -216,7 +216,7 @@ export const ProjectCalculator: React.FC<ProjectCalculatorProps> = ({ onProceedW
                 className="w-full py-2.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-400 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 font-mono"
               >
                 <MessageCircle className="w-4 h-4 fill-current" />
-                <span>Discuss on WhatsApp (+92 3351031333)</span>
+                <span>Discuss on WhatsApp (+92 335 1031333)</span>
               </a>
             </div>
 

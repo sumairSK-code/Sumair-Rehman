@@ -8,7 +8,6 @@ interface FooterProps {
   onOpenHireModal: () => void;
   onOpenScreenshot: () => void;
   onOpenPosterModal: () => void;
-  onOpenEditModal: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -16,7 +15,6 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenHireModal,
   onOpenScreenshot,
   onOpenPosterModal,
-  onOpenEditModal,
 }) => {
   return (
     <footer className="bg-[#08090e] border-t border-white/10 pt-12 pb-8 text-xs text-slate-400">
@@ -140,16 +138,8 @@ export const Footer: React.FC<FooterProps> = ({
             </button>
 
             <button
-              onClick={onOpenEditModal}
-              className="text-[#25F4EE] hover:underline cursor-pointer flex items-center gap-1"
-            >
-              <Edit3 className="w-3 h-3" />
-              <span>Edit Details</span>
-            </button>
-
-            <button
               onClick={onOpenHireModal}
-              className="px-3.5 py-1.5 bg-[#FE2C55] text-white font-bold rounded-lg hover:bg-[#e02449] cursor-pointer"
+              className="px-4 py-2 bg-[#FE2C55] hover:bg-[#e02449] active:scale-95 text-white font-bold rounded-xl transition-all shadow-md shadow-[#FE2C55]/25 cursor-pointer"
             >
               Hire Sumair
             </button>
@@ -162,9 +152,9 @@ export const Footer: React.FC<FooterProps> = ({
             © {new Date().getFullYear()} {profile.fullName}. Freelance {profile.headline}.
           </span>
           <div className="flex items-center gap-3 font-mono">
-            <span>WhatsApp: {profile.phone}</span>
+            <span className="text-emerald-400 font-semibold">WhatsApp: {profile.phone}</span>
             <span>·</span>
-            <span>{profile.email}</span>
+            <span className="text-slate-300">{profile.email}</span>
           </div>
         </div>
 

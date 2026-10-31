@@ -8,15 +8,16 @@ import {
 export const SUMAIR_PROFILE = {
   fullName: 'Sumair Rehman',
   headline: 'TikTok Shop & E-Commerce Growth Expert',
-  phone: '+92 3351031333',
+  phone: '+92 335 1031333',
   whatsappUrl: 'https://wa.me/923351031333',
   email: 'sumairkhan4950@gmail.com',
+  secondaryEmail: 'sumairtiktokshop@gmail.com',
   linkedinUrl: 'https://linkedin.com/in/sumair-rehman-543a87326',
   photoUrl: '/assets/aistudio/9886ff78-a1b8-4487-bcd4-865c47e0a515_e796b275.png',
   posterUrl: '/assets/aistudio/WhatsApp_Image_2026-10-30_at_02.36.26_81a5f27e.jpeg',
   upworkProofUrl: '/assets/aistudio/image_0a70cf28.png',
   experience: '2+ Years Experience',
-  location: 'Working Globally · Freelancer',
+  location: 'Pakistan (PK) · Working Globally',
   specialties: [
     'TikTok Shop Management',
     'TikTok & Meta Ads',

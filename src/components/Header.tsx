@@ -8,7 +8,6 @@ interface HeaderProps {
   onOpenHireModal: (service?: string) => void;
   onOpenScreenshot: () => void;
   onOpenPosterModal: () => void;
-  onOpenEditModal: () => void;
   activeSection: string;
   setActiveSection: (sec: string) => void;
 }
@@ -18,14 +17,13 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenHireModal,
   onOpenScreenshot,
   onOpenPosterModal,
-  onOpenEditModal,
   activeSection,
   setActiveSection,
 }) => {
   const [copied, setCopied] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#0c0e14]/95 backdrop-blur-md border-b border-white/10">
+    <header className="sticky top-0 z-40 w-full bg-[#0a0c12]/95 backdrop-blur-md border-b border-white/10 shadow-xl">
       
       {/* Top Banner with Direct WhatsApp & Global Status */}
       <div className="bg-gradient-to-r from-[#FE2C55] via-[#a81c3c] to-[#010101] text-white text-xs py-1.5 px-4 font-medium">
@@ -36,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
               FREELANCER | WORKING GLOBALLY:
             </span>
             <span className="text-yellow-200 font-semibold hidden sm:inline">
-              Available for TikTok Shop Management & Paid Ads
+              Available for TikTok Shop Management & Performance Ads
             </span>
             <span aria-hidden="true" className="opacity-50 hidden sm:inline">·</span>
             <span className="text-white hidden md:inline">{profile.experience}</span>
@@ -135,19 +133,9 @@ export const Header: React.FC<HeaderProps> = ({
           </a>
         </nav>
 
-        {/* Zone 3: Direct Actions (Edit Profile, Share, WhatsApp & Hire) */}
+        {/* Zone 3: Direct Actions (Share, WhatsApp & Let's Talk) */}
         <div className="flex items-center gap-2 shrink-0">
           
-          {/* Edit Profile & Photos button */}
-          <button
-            onClick={onOpenEditModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#25F4EE]/10 hover:bg-[#25F4EE]/20 border border-[#25F4EE]/30 text-[#25F4EE] text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-            title="Upload or change photos and profile info"
-          >
-            <Edit3 className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Edit Photos</span>
-          </button>
-
           {/* Copy Share Link */}
           <button
             onClick={() => {

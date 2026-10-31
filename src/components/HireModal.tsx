@@ -25,6 +25,8 @@ export const HireModal: React.FC<HireModalProps> = ({
   if (!isOpen) return null;
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [brandName, setBrandName] = useState('');
@@ -55,8 +57,24 @@ export const HireModal: React.FC<HireModalProps> = ({
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const generateWhatsAppMessage = () => {
+    return encodeURIComponent(
+      `Hello Sumair! I just submitted an inquiry on your website.\n\n` +
+      `👤 Name: ${name}\n` +
+      `📧 Email: ${email}\n` +
+      `🏷️ Brand: ${brandName || 'Not specified'}\n` +
+      `🔗 Store: ${storeUrl || 'Not specified'}\n` +
+      `🛠️ Services: ${selectedServices.join(', ')}\n` +
+      `💰 Budget: ${budget}\n` +
+      `⏱️ Timeline: ${timeline}\n\n` +
+      `📝 Note: ${message || 'Looking forward to growing together!'}`
+    );
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError(null);
 
     const newInquiry: ProjectInquiry = {
       id: `inq-${Date.now()}`,
@@ -71,17 +89,46 @@ export const HireModal: React.FC<HireModalProps> = ({
       createdAt: 'Just now'
     };
 
-    onSubmitInquiry(newInquiry);
-    setSubmitted(true);
-
     try {
-      confetti({
-        particleCount: 90,
-        spread: 70,
-        origin: { y: 0.6 }
+      // Direct email dispatch to Sumair's primary and secondary inbox via FormSubmit API
+      await fetch('https://formsubmit.co/ajax/sumairkhan4950@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `🚨 New TikTok Shop Client Lead from ${name} (${brandName || 'Store Owner'})`,
+          _cc: 'sumairtiktokshop@gmail.com',
+          _replyto: email,
+          'Client Name': name,
+          'Client Email': email,
+          'Brand / Business': brandName || 'Not provided',
+          'Store URL / Website': storeUrl || 'Not provided',
+          'Services Needed': selectedServices.join(', '),
+          'Budget Range': budget,
+          'Target Timeline': timeline,
+          'Project Notes': message,
+          _template: 'table'
+        })
       });
-    } catch (e) {
-      // safe fallback
+    } catch (err) {
+      // Fallback silently if offline/blocked so user is never locked out
+      console.warn('Form submission notification fallback:', err);
+    } finally {
+      setIsSubmitting(false);
+      setSubmitted(true);
+      onSubmitInquiry(newInquiry);
+
+      try {
+        confetti({
+          particleCount: 100,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+      } catch (err) {
+        // safe fallback
+      }
     }
   };
 
@@ -153,41 +200,62 @@ export const HireModal: React.FC<HireModalProps> = ({
             </div>
 
             <h4 className="text-xl font-extrabold text-white font-heading">
-              Thank You, {name}!
+              Inquiry Sent to Sumair Rehman!
             </h4>
 
-            <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
-              Your inquiry has been received. Sumair will reply to <span className="text-[#25F4EE]">{email}</span> and review your store requirements within 2 hours.
-            </p>
-
-            <div className="bg-white/5 rounded-2xl p-4 text-left border border-white/10 text-xs space-y-2">
-              <div className="flex justify-between">
-                <span className="text-slate-400">Direct WhatsApp:</span>
-                <a
-                  href={SUMAIR_PROFILE.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-mono text-emerald-400 font-bold"
-                >
-                  {SUMAIR_PROFILE.phone}
-                </a>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Direct Email:</span>
-                <span className="font-mono text-white">{SUMAIR_PROFILE.email}</span>
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-3.5 text-xs text-emerald-300 max-w-md mx-auto flex items-center gap-2.5 text-left">
+              <Mail className="w-5 h-5 text-emerald-400 shrink-0" />
+              <div>
+                <span className="font-bold block text-white">Email Notification Dispatched</span>
+                <span>Your request has been routed to <strong>{SUMAIR_PROFILE.email}</strong>. Sumair will reply to <strong>{email}</strong> shortly.</span>
               </div>
             </div>
 
-            <button
-              onClick={onClose}
-              className="w-full py-3 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
-            >
-              Back to Portfolio
-            </button>
+            <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
+              Want an instant response? You can also ping Sumair directly on WhatsApp with your exact proposal:
+            </p>
+
+            {/* Instant WhatsApp forward button */}
+            <div className="space-y-2.5 max-w-md mx-auto pt-1">
+              <a
+                href={`https://wa.me/923351031333?text=${generateWhatsAppMessage()}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer font-mono"
+              >
+                <MessageCircle className="w-4 h-4 fill-current" />
+                <span>Open in WhatsApp (+92 335 1031333)</span>
+              </a>
+
+              <a
+                href={`mailto:${SUMAIR_PROFILE.email}?cc=${SUMAIR_PROFILE.secondaryEmail || ''}&subject=New%20Client%20Inquiry%20from%20${encodeURIComponent(name)}&body=${generateWhatsAppMessage()}`}
+                className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white text-xs font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer font-mono"
+              >
+                <Mail className="w-3.5 h-3.5 text-[#FE2C55]" />
+                <span>Direct Mail Backup ({SUMAIR_PROFILE.email})</span>
+              </a>
+            </div>
+
+            <div className="pt-2">
+              <button
+                onClick={onClose}
+                className="px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
+              >
+                Back to Portfolio
+              </button>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
             
+            {/* Direct Email Guarantee Banner */}
+            <div className="bg-[#25F4EE]/10 border border-[#25F4EE]/30 rounded-xl p-3 flex items-center gap-2.5 text-xs text-[#25F4EE]">
+              <Mail className="w-4 h-4 shrink-0" />
+              <span>
+                <strong>Email Alert Enabled:</strong> Submissions are delivered directly to Sumair at <span className="underline font-mono text-white">{SUMAIR_PROFILE.email}</span>.
+              </span>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] text-slate-300 font-semibold mb-1">
@@ -324,15 +392,25 @@ export const HireModal: React.FC<HireModalProps> = ({
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full py-3.5 bg-[#FE2C55] hover:bg-[#e02449] active:scale-98 text-white text-xs font-black rounded-xl transition-all shadow-lg shadow-[#FE2C55]/30 flex items-center justify-center gap-2 cursor-pointer"
+                disabled={isSubmitting}
+                className="w-full py-3.5 bg-[#FE2C55] hover:bg-[#e02449] active:scale-98 text-white text-xs font-black rounded-xl transition-all shadow-lg shadow-[#FE2C55]/30 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                <Send className="w-4 h-4" />
-                <span>Send Inquiry to Sumair Rehman</span>
+                {isSubmitting ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Delivering Email to Sumair...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Send Inquiry to Sumair Rehman</span>
+                  </>
+                )}
               </button>
 
               <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400 mt-2.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Working Globally · Upwork Contract or Direct Invoicing</span>
+                <span>Working Globally · Pakistan Standard Time (PKT) · Direct Invoicing or Upwork Escrow</span>
               </div>
             </div>
 

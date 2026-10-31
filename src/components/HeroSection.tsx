@@ -8,7 +8,6 @@ interface HeroSectionProps {
   onOpenHireModal: (service?: string) => void;
   onOpenScreenshot: () => void;
   onOpenPosterModal: () => void;
-  onOpenEditModal: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
@@ -16,7 +15,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenHireModal,
   onOpenScreenshot,
   onOpenPosterModal,
-  onOpenEditModal,
 }) => {
   const quickServicesList = [
     'TikTok Shop Setup & Management',
@@ -161,16 +159,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     TikTok Shop Expert
                   </span>
                 </div>
-
-                {/* Change Photo Quick Overlay Button */}
-                <button
-                  onClick={onOpenEditModal}
-                  className="absolute top-4 right-4 bg-black/80 hover:bg-black text-white backdrop-blur-md border border-white/25 px-2.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg text-[11px] font-semibold transition-all cursor-pointer opacity-90 hover:opacity-100"
-                  title="Upload or change this photo"
-                >
-                  <Camera className="w-3.5 h-3.5 text-[#25F4EE]" />
-                  <span>Change Photo</span>
-                </button>
 
                 {/* Bottom Overlay Info on Photo */}
                 <div className="absolute bottom-4 inset-x-4 p-3.5 bg-black/85 backdrop-blur-md rounded-2xl border border-white/15">
